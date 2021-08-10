@@ -2,7 +2,7 @@
 <html lang="en" class="h-100">
 
 <head>
-    <title>App Name: A Coding Project by Adrián Muñoz</title>
+    <title>LOAN SHARK: A Coding Project by Adrián Muñoz</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,7 +27,7 @@
             <!--Need the mark of the logo-->
             <img src="/img/Adrián_logo.png" class="d-inline-block align-text-top" 
             alt="LogoMark" width="30"> 
-            <div class="d-block ms-2 m-auto text-uppercase">App Name</div></a>
+            <div class="d-block ms-2 m-auto text-uppercase">LOAN SHARK</div></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -55,7 +55,67 @@
 </nav>
 <!-- ==== Main Section ==== -->
 <main class="flex-shrink-0">
-    <div class="container"></div>
+    <div class="container mt-5">
+        <h1 class="mb-3">Loan Calculator</h1>
+        <div class="row row-cols-1 row-cols-lg-2 gx-5 gy-5">
+            <div class="col">
+                <!--==User Inputs==-->
+                <form class="row row-cols-1 rounded bg-light text-dark gy-2">
+                    <div class="col">
+                        <label class="form-label" aria-label="Loan Amount">Loan Amount</label>
+                        <input id="loanAmount" type="number" class="form-control" aria-label="Loan Amount" 
+                        placeholder="Introduce the loan amount">
+                    </div>
+                    <div class="col">
+                        <label class="form-label" aria-label="Number of Months to Repay">Term (Months)</label>
+                        <input id="termMonths" type="number" class="form-control" aria-label="Number of Months" 
+                        value="60">
+                    </div>
+                    <div class="col">
+                        <label class="form-label" aria-label="Interest Rate">Interest Rate</label>
+                        <input id="interestRate" type="number" class="form-control" aria-label="Interest Rate" 
+                        value="3">
+                    </div>
+                    <div class="col mt-3 mb-3">
+                        <button id="calculateBtn" type="button" class="btn btn-dark">Calculate</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <!--==Main Result to the User==-->
+                <div class="row row-cols-1">
+                    <div id="monthlyPayment" class="col text-center fst-italic mb-4">
+                        <h3>Your Monthly Payments</h3>
+                    </div>
+                    <div id="totalPrincipal" class="col d-flex justify-content-between">
+                        <h5>Total Principal</h5>
+                    </div>
+                    <div id="totalInterest" class="col d-flex justify-content-between">
+                        <h5>Total Interest</h5>
+                    </div>
+                    <div id="totalCost" class="col d-flex justify-content-between">
+                        <h5>Total Cost</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <!--==Exact Results==-->
+                <table class="table table-responsive table-light table-sm">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Month</th>
+                            <th scope="col">Payment</th>
+                            <th scope="col">Principal</th>
+                            <th scope="col">Interest</th>
+                            <th scope="col">Total Interest</th>
+                            <th scope="col">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableResults"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </main>
 <!-- ==== Footer Section ==== -->
 <footer class="footer mt-auto py-3 sticky-footer">
