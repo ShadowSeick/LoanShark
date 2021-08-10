@@ -57,7 +57,7 @@
 <main class="flex-shrink-0">
     <div class="container mt-5">
         <h1 class="mb-3">Loan Calculator</h1>
-        <div class="row row-cols-1 row-cols-lg-2 gx-5 gy-5">
+        <div class="row row-cols-1 row-cols-lg-2 gx-lg-5 gy-5">
             <div class="col">
                 <!--==User Inputs==-->
                 <form class="row row-cols-1 rounded bg-light text-dark gy-2">
@@ -77,42 +77,49 @@
                         value="3">
                     </div>
                     <div class="col mt-3 mb-3">
-                        <button id="calculateBtn" type="button" class="btn btn-dark">Calculate</button>
+                        <button id="btnCalculate" type="button" class="btn btn-dark">Calculate</button>
                     </div>
                 </form>
             </div>
             <div class="col">
                 <!--==Main Result to the User==-->
                 <div class="row row-cols-1">
-                    <div id="monthlyPayment" class="col text-center fst-italic mb-4">
+                    <div class="col text-center fst-italic mb-4">
                         <h3>Your Monthly Payments</h3>
+                        <div id="monthlyPayment"></div>
                     </div>
-                    <div id="totalPrincipal" class="col d-flex justify-content-between">
+                    <div class="col d-flex justify-content-between">
                         <h5>Total Principal</h5>
+                        <div id="totalPrincipal"></div>
                     </div>
-                    <div id="totalInterest" class="col d-flex justify-content-between">
+                    <div class="col d-flex justify-content-between">
                         <h5>Total Interest</h5>
+                        <div id="totalInterest"></div>
                     </div>
-                    <div id="totalCost" class="col d-flex justify-content-between">
+                    <div class="col d-flex justify-content-between">
                         <h5>Total Cost</h5>
+                        <div id="totalCost"></div>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <!--==Exact Results==-->
-                <table class="table table-responsive table-light table-sm">
-                    <thead>
-                        <tr class="text-center">
-                            <th scope="col">Month</th>
-                            <th scope="col">Payment</th>
-                            <th scope="col">Principal</th>
-                            <th scope="col">Interest</th>
-                            <th scope="col">Total Interest</th>
-                            <th scope="col">Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableResults"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped table-light table-sm">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">Month</th>
+                                <th scope="col">Payment</th>
+                                <th scope="col">Principal</th>
+                                <th scope="col">Interest</th>
+                                <th scope="col">Total Interest</th>
+                                <th scope="col">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableResults"></tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -148,6 +155,9 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
     <script src="/js/site.js"></script>
+    <script>
+        document.getElementById("btnCalculate").addEventListener("click", startLoanShark);
+    </script>
 </body>
 
 </html>
