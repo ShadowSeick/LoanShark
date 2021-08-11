@@ -65,19 +65,192 @@
         <div class="row row-cols-1 row-cols-lg-2">
             <div class="col-lg-8 order-last order-lg-first">
                 <pre class="line-numbers"><code class="language-javascript">
-                    //Call Hello World
-                    function helloWorld() {
-                    alert("Hello World");
+                    //Control Function
+                    function startLoanShark() {
+                        
+                        let loanAmount = document.getElementById("loanAmount").value;
+                        let termMonths = document.getElementById("termMonths").value;
+                        let interestRate = document.getElementById("interestRate").value;
+
+                        loanAmount = Number.parseInt(loanAmount);
+                        termMonths = Number.parseInt(termMonths);
+                        interestRate = Number.parseInt(interestRate);
+
+                        if (loanAmount > 0 && termMonths > 0 && interestRate > 0) {
+                            
+                            if (interestRate < 100) {
+                                let paymentArrayLoan = arrayOfPayments(loanAmount, termMonths, interestRate);
+                                displayLoanInformation(paymentArrayLoan);
+                            } else {
+                                alert("You are getting scammed, look another place to get your loan");
+                            }
+                        }
+                        else {
+                            alert("You have to introduce positive Numbers!")
+                        }
+                        
+                    }
+
+                    //Logic
+                    function totalMonthlyPayment(loanAmount, termMonths, interestRate) {
+                        return ((loanAmount) * (interestRate /1200)/(1-(1 + (interestRate/1200))**(-termMonths)));
+                    }
+
+                    function interestPayment(amountToPay, interestRate) {
+                        return amountToPay * interestRate / 1200;
+                    }
+
+                    function roundToCents(number) {
+                        return Number.parseFloat((Math.round(number * 100) /100).toFixed(2));
+                    }
+
+                    function arrayOfPayments(loanAmount, termMonths, interestRate) {
+
+                        //Initiate necessary variables
+                        let paymentLoanArray = [];
+                        let monthlyPayment = roundToCents(totalMonthlyPayment(loanAmount, termMonths, interestRate));
+                        let remainingBalance = loanAmount;
+                        let month = 0;
+                        let interestPay = 0;
+                        let totalInterest = 0;
+                        let principalPayment = 0;
+
+                        for(let i = 0; i < termMonths; i++) {
+
+                            interestPay = month > 0 ? 
+                                                    interestPayment(remainingBalance, interestRate) : 
+                                                    interestPayment(loanAmount, interestRate);
+                            month = 1 + i;
+                            principalPayment = monthlyPayment - interestPay;
+                            remainingBalance -= principalPayment;
+                            totalInterest += interestPay;
+                    
+                            interestPay = roundToCents(interestPay);
+                            principalPayment = roundToCents(principalPayment);
+                            //Problems with the rounded cents
+                            remainingBalance = remainingBalance < 0 ? 0 : roundToCents(remainingBalance);
+                            totalInterest = roundToCents(totalInterest);
+
+                            paymentLoanArray.push([month, monthlyPayment, principalPayment, interestPay, totalInterest, remainingBalance]);
+                        }
+
+                        return paymentLoanArray; 
+                    }
+
+                    //Display Function
+
+                    function displayLoanInformation(paymentLoanArray) {
+
+                        //Gross Information
+                        let monthlyPayment = document.getElementById("monthlyPayment");
+                        let totalPrincipal = document.getElementById("totalPrincipal");
+                        let totalInterest = document.getElementById("totalInterest");
+                        let totalCost = document.getElementById("totalCost");
+                        let table = document.getElementById("tableResults");
+
+                        let monthlyPaymentAmount = paymentLoanArray[0][1];
+                        let totalPrincipalAmount = monthlyPaymentAmount + paymentLoanArray[0][5] - paymentLoanArray[0][3];
+                        let totalInterestAmount = paymentLoanArray[paymentLoanArray.length - 1][4];
+                        let totalCostAmount = totalPrincipalAmount + totalInterestAmount;
+
+
+                        //Reset element
+                        monthlyPayment.innerHTML = "";
+                        totalPrincipal.innerHTML = "";
+                        totalInterest.innerHTML = "";
+                        totalCost.innerHTML = "";
+                        table.innerHTML = "";
+
+                        //Insert information for Loan
+                        for (let i = 0; i < paymentLoanArray.length; i++) {
+
+                            let row = table.insertRow();
+                            let rowInformation = paymentLoanArray[i];
+
+                            for (let j = 0; j < rowInformation.length; j++) {
+                                row.insertCell().innerHTML = rowInformation[j];
+                            }
+
+                        }
+                        monthlyPayment.innerHTML = `<p class ="fw-bold display-3">${monthlyPaymentAmount}</p>`;
+                        totalPrincipal.innerHTML = `<p class ="fw-bold">${totalPrincipalAmount}</p>`;
+                        totalInterest.innerHTML = `<p class ="fw-bold">${totalInterestAmount}</p>`;
+                        totalCost.innerHTML = `<p class ="fw-bold">${totalCostAmount}</p>`;
+
                     }
                     </code>
                 </pre>
             </div>
             <div class="col-lg-4">
-                <p>The Code is structured in one function.</p>
-                <h5>Hello World</h5>
-                <p>Hello World is a function that displays an alert with a message of
-                    "Hello World"
+                <p>The Code is structured in three parts: Control, Logic and Display. Control and Display
+                    has everything it needs in one function each, but Logic has been separated in 4 functions.
                 </p>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header font-monospace" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Controller function
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                        <div class="accordion-body text-dark">
+                          <strong class="font-monospace">startLoanShark()</strong> 
+                          <p>
+                            As its name implies, it launches and controls the application. Here, I haven't used ES6
+                            and instead I have used the traditional if/else. This is for readability purpose only.
+                            It works the other way also but, i didn't see any apparent improvement by using it.
+                          </p>
+                          <p>
+                            It is necessary validate any user input value. First, it needs to change any string to number. 
+                            Then it is needed to check the numbers make sense (they has to be positive) and the interest rate lower than 100.
+                            The last part isn't necessary (there are companies which charges even more interest), but
+                            I added it as a bonus.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header font-monospace" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Logic 
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body text-dark">
+                          <strong class="font-monospace">arrayOfPayments(fizzNumber, buzzNumber)</strong>
+                          <div class="bg-warning">
+                            <strong class="font-monospace">totalMonthlyPayment, interestPayment and roundToCents</strong>
+                              <p>
+                                  I won't discuss what these three functions do, the a
+                              </p>
+                          </div>
+                          <p>
+                            This function generates and returns an array which contains all the information needed. 
+                              
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header font-monospace" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Display function
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body text-dark">
+                          <strong class="font-monospace">displayFizzBuzz(fizzBuzzArray)</strong>
+                          <p>
+                            Its porpuse is to display the array into a table. To make this first we make the table visible, removing a class from it.
+                            Then we grab the tbody component where the results will go (I have put the name table, even it is not, to make it easier
+                            to read). The innerHTML of the table is reseted and we use a for loop to make the different rows and cells and display the
+                            results of the array.
+                            Probably, there is a ES6 better way to display the results (replacing the For Loop), but I haven't found the way yet.        
+                            </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
